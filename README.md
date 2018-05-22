@@ -1,4 +1,8 @@
 # Semantic Segmentation
+### Build status
+[![Build Status](https://travis-ci.org/stela/CarND-Semantic-Segmentation.svg?branch=master)](https://travis-ci.org/stela/CarND-Semantic-Segmentation)
+
+
 ### Introduction
 In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
 

@@ -10,8 +10,8 @@ import project_tests as tests
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
 print('TensorFlow Version: {}'.format(tf.__version__))
 
-# Check for a GPU
-if not tf.test.gpu_device_name():
+# Check for a GPU (unless running as travis-ci job)
+if not tf.test.gpu_device_name() and not "CI" in os.environ:
     warnings.warn('No GPU found. Please use a GPU to train your neural network.')
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
