@@ -33,6 +33,6 @@ install:
   - pip3 list
 
 script:
-  - python3 -version
+  - python3 --version
   - pip3 list
   - python3 main.py
