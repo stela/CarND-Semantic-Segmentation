@@ -34,5 +34,8 @@ install:
 
 script:
   - python3 --version
+  - python --version
+  - which python3
+  - which python
   - pip3 list
-  - python3 main.py
+  - python main.py
