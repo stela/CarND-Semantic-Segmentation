@@ -29,7 +29,10 @@ install:
     elif [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
       conda install Pillow;
     fi
-  - pip install tensorflow
+  - pip3 install tensorflow
+  - pip3 list
 
 script:
-  - python main.py
+  - python3 -version
+  - pip3 list
+  - python3 main.py
