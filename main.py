@@ -52,26 +52,37 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     :param num_classes: Number of classes to classify
     :return: The Tensor for the last layer of output
     """
-    # TODO: Implement function
-
     # Based on  "Lesson 10: Scene Understanding - FCN-8 - {En,De}coder"
-    # and the "Fully Convolutional Networks for Semantic Segmentation" paper, section 4
+    # and the "Fully Convolutional Networks for Semantic Segmentation" paper, figure 3, the "FCN-8" part.
 
     # 1x1 layer
     l2_reg_scale = 1e-3
-    conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
-                                kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+    vgg_l7_1x1 =\
+        tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
 
     # deconvolution layer to restore position and resolution from original image
-    output = tf.layers.conv2d_transpose(conv_1x1, num_classes, kernel_size=4, strides=2, padding='same',
-                                        kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
-    # skip-layers...
+    vgg_l7_deconv =\
+        tf.layers.conv2d_transpose(vgg_l7_1x1, num_classes, kernel_size=4, strides=2, padding='same',
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+    vgg_l4_1x1 =\
+        tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, strides=1, padding='same',
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
 
-    # TODO more FCN-8 decoder layers here...
+    vgg_l4_7_merged = tf.add(vgg_l4_1x1, vgg_l7_deconv)
+    vgg_l4_7_deconv =\
+        tf.layers.conv2d_transpose(vgg_l4_7_merged, num_classes, kernel_size=4, strides=2, padding='same',
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
 
+    vgg_l3_1x1 =\
+        tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, strides=1, padding='same',
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+    vgg_l3_4_7_merged = tf.add(vgg_l3_1x1, vgg_l4_7_deconv)
+    vgg_l3_4_7_deconv =\
+        tf.layers.conv2d_transpose(vgg_l3_4_7_merged, num_classes, kernel_size=16, strides=8, padding='same',
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
 
-
-    return output
+    return vgg_l3_4_7_deconv
 tests.test_layers(layers)
 
 
