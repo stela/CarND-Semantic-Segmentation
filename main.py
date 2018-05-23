@@ -24,8 +24,6 @@ def load_vgg(sess, vgg_path):
     :param vgg_path: Path to vgg folder, containing "variables/" and "saved_model.pb"
     :return: Tuple of Tensors from VGG model (image_input, keep_prob, layer3_out, layer4_out, layer7_out)
     """
-    # TODO: Implement function
-    #   Use tf.saved_model.loader.load to load the model and weights
     vgg_tag = 'vgg16'
     vgg_input_tensor_name = 'image_input:0'
     vgg_keep_prob_tensor_name = 'keep_prob:0'
@@ -55,6 +53,24 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     :return: The Tensor for the last layer of output
     """
     # TODO: Implement function
+
+    # Based on  "Lesson 10: Scene Understanding - FCN-8 - {En,De}coder"
+    # and the "Fully Convolutional Networks for Semantic Segmentation" paper, section 4
+
+    # 1x1 layer
+    l2_reg_scale = 1e-3
+    conv_1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
+                                kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+
+    # deconvolution layer to restore position and resolution from original image
+    output = tf.layers.conv2d_transpose(conv_1x1, num_classes, kernel_size=4, stride=2, padding='same',
+                                        kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+    # skip-layers...
+
+    # TODO more FCN-8 decoder layers here...
+
+
+
     return None
 tests.test_layers(layers)
 
