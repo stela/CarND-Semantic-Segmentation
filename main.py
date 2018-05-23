@@ -61,7 +61,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
         tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
                          kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
 
-    # deconvolution layer to restore position and resolution from original image
+    # deconvolution layers to restore position and resolution from original image
     vgg_l7_deconv =\
         tf.layers.conv2d_transpose(vgg_l7_1x1, num_classes, kernel_size=4, strides=2, padding='same',
                                    kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
@@ -95,11 +95,17 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     :param num_classes: Number of classes to classify
     :return: Tuple of (logits, train_op, cross_entropy_loss)
     """
-    # TODO: Implement function
 
-    logits = tf.reshape(input, (-1, num_classes))
-    # TODO use Adam optimizer here?
-    cross_entropy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, labels))
+    # Optimize loss function, based on logits and labels
+    logits = tf.reshape(nn_last_layer, (-1, num_classes))
+    labels = tf.reshape(correct_label, (-1, num_classes))
+    # Note to reviewer, remove "_v2" below if you have an old tensorflow release
+    # good or bad to backprop into labels? stopping it for compatibility for now
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=tf.stop_gradient(labels), logits=logits)
+    cross_entropy_loss = tf.reduce_mean(cross_entropy)
+
+    # Adam optimizer worked fine in previous projects, and tunes itself :-)
+    train_op = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy_loss)
 
     return logits, train_op, cross_entropy_loss
 tests.test_optimize(optimize)
