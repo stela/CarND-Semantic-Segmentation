@@ -7,22 +7,17 @@ addons:
 
 language: python
 python:
-  - "3.6.5"
+  - "3.6.4"
 
 install:
   # based on http://conda.pydata.org/docs/travis.html and https://github.com/tflearn/tflearn/blob/master/.travis.yml
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION wheel numpy scipy  h5py
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION wheel numpy scipy
   - source activate test-environment
   - conda install Pillow;
   - pip install tensorflow
