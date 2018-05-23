@@ -71,7 +71,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
 
 
 
-    return None
+    return output
 tests.test_layers(layers)
 
 
@@ -85,7 +85,12 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     :return: Tuple of (logits, train_op, cross_entropy_loss)
     """
     # TODO: Implement function
-    return None, None, None
+
+    logits = tf.reshape(input, (-1, num_classes))
+    # TODO use Adam optimizer here?
+    cross_entropy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, labels))
+
+    return logits, train_op, cross_entropy_loss
 tests.test_optimize(optimize)
 
 
@@ -105,6 +110,12 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param learning_rate: TF Placeholder for learning rate
     """
     # TODO: Implement function
+    for epochs in epochs:
+        for image, label in get_batches_fn(batch_size):
+            # TODO Training, losses = session.run()
+            # TODO do stuff, keep last pass
+            pass
+        pass
     pass
 tests.test_train_nn(train_nn)
 
@@ -133,6 +144,7 @@ def run():
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
         # TODO: Build NN using load_vgg, layers, and optimize function
+        load_vgg(sess, vgg_path)
 
         # TODO: Train NN using the train_nn function
 
