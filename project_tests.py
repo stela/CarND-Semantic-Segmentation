@@ -13,6 +13,7 @@ def test_safe(func):
     Isolate tests
     """
     def func_wrapper(*args):
+        print('About to test: ' + func.__name__)
         with tf.Graph().as_default():
             result = func(*args)
         print('Tests Passed: ' + func.__name__)

@@ -126,14 +126,19 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     :param keep_prob: TF Placeholder for dropout keep probability
     :param learning_rate: TF Placeholder for learning rate
     """
-    # TODO: Implement function
-    for epochs in epochs:
-        for image, label in get_batches_fn(batch_size):
-            # TODO Training, losses = session.run()
-            # TODO do stuff, keep last pass
-            pass
-        pass
-    pass
+    for epo in range(epochs):
+        print('Epoch: {}'.format(epo))
+        for i, (img, label) in enumerate(get_batches_fn(batch_size)):
+            _, loss = sess.run(
+                [train_op, cross_entropy_loss],
+                feed_dict={
+                    input_image: img,
+                    correct_label: label,
+                    keep_prob: 0.6,
+                    learning_rate: 0.0001
+                }
+            )
+            print('Batch: {}, Loss: {:.3f}'.format(i, loss), flush=True)
 tests.test_train_nn(train_nn)
 
 
