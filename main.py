@@ -160,7 +160,8 @@ def run():
     data_dir = './data'
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
-    epochs = 6
+    # On my laptop, each training epoch takes around 13 minutes, no GPU
+    epochs = 25
     batch_size = 4
 
     # Download pretrained vgg model
