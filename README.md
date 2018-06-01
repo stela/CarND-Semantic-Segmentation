@@ -2,7 +2,7 @@
 
 ## Loading the Pretrained VGG16 Model
 
-The pretrained model is loaded by [load_vgg()](main.py#L20-L43). It returns a tuple of the relevant layers which will be accessed later on.
+The pretrained model is loaded by [load_vgg()](main.py#L20-L42). It returns a tuple of the relevant layers which will be accessed later on.
 
 ## Feature Learning
 
@@ -35,6 +35,8 @@ The network is trained in [train_nn()](main.py#L124-L153). For each epoch its nu
 ![uu_000092.png](runs/1527649715.616012/uu_000092.png  "uu_000092.png")
 
 As can be seen sections of well-lit road are handled well, while really dark shadows are more challenging to be properly classified as road.
+
+All the images can be found in the [runs/1527649715.616012](runs/1527649715.616012) directory as well as in [project.zip](project.zip) if you want to view them in bulk.
 
 ## Original README
 See [README-original.md](README-original.md)
