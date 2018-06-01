@@ -10,7 +10,7 @@ import project_tests as tests
 assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
 print('TensorFlow Version: {}'.format(tf.__version__))
 
-# Check for a GPU (unless running as travis-ci job)
+# Check for a GPU (unless running as Travis-CI job)
 if not tf.test.gpu_device_name() and not "CI" in os.environ:
     warnings.warn('No GPU found. Please use a GPU to train your neural network.')
 else:
@@ -103,8 +103,7 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     # Optimize loss function, based on logits and labels
     logits = tf.reshape(nn_last_layer, (-1, num_classes))
     labels = tf.reshape(correct_label, (-1, num_classes))
-    # TODO classroom says reshape, walkthrough comment says not required, try without once working
-    # Note to reviewer, remove "_v2" below if you have an old tensorflow release
+    # Note to reviewer: remove "_v2" and tf.stop_gradient() below if you have an old tensorflow release
     # good or bad to backprop into labels? stopping it for compatibility for now
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=tf.stop_gradient(labels), logits=logits)
     cross_entropy_loss = tf.reduce_mean(cross_entropy)
@@ -145,7 +144,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                 feed_dict={
                     input_image: img,
                     correct_label: label,
-                    # TODO figure out why argument cannot be a Tensor object? using static values for now
+                    # using static values for keep_prob and learning_rate for now,
+                    # later figure out if the arguments can be tensor objects
                     keep_prob: 0.6,
                     learning_rate: 0.001
                 }
@@ -160,7 +160,6 @@ def run():
     data_dir = './data'
     runs_dir = './runs'
     tests.test_for_kitti_dataset(data_dir)
-    # On my laptop, each training epoch takes around 13 minutes, no GPU
     epochs = 25
     batch_size = 4
 
