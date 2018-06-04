@@ -55,32 +55,46 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # Based on  "Lesson 10: Scene Understanding - FCN-8 - {En,De}coder"
     # and the "Fully Convolutional Networks for Semantic Segmentation" paper, figure 3, the "FCN-8" part.
 
+    # It seems xavier_initializer() is usually recommended instead of truncated_normal_initializer().
+    # xavier_initializer() was aimed at sigmoid activation functions popular around 2010 when it was invented,
+    # "He initialization", variance_scaling_initializer() is adapted to ReLu.
+    # Source https://stats.stackexchange.com/questions/319323/whats-the-difference-between-variance-scaling-initializer-and-xavier-initialize
+    # VGG16 uses the ReLu activation function, so let's initialize using variance_scaling_initializer()!
+
     # 1x1 layer
     l2_reg_scale = 1e-3
+    #initializer = tf.truncated_normal_initializer(stddev=0.01)
+    initializer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
     vgg_l7_1x1 =\
         tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
-                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                         kernel_initializer=initializer)
 
     # deconvolution layers to restore position and resolution from original image
     vgg_l7_deconv =\
         tf.layers.conv2d_transpose(vgg_l7_1x1, num_classes, kernel_size=4, strides=2, padding='same',
-                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                                   kernel_initializer=initializer)
     vgg_l4_1x1 =\
         tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size=1, strides=1, padding='same',
-                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                         kernel_initializer=initializer)
 
     vgg_l4_7_merged = tf.add(vgg_l4_1x1, vgg_l7_deconv)
     vgg_l4_7_deconv =\
         tf.layers.conv2d_transpose(vgg_l4_7_merged, num_classes, kernel_size=4, strides=2, padding='same',
-                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                                   kernel_initializer=initializer)
 
     vgg_l3_1x1 =\
         tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size=1, strides=1, padding='same',
-                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                         kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                         kernel_initializer=initializer)
     vgg_l3_4_7_merged = tf.add(vgg_l3_1x1, vgg_l4_7_deconv)
     vgg_l3_4_7_deconv =\
         tf.layers.conv2d_transpose(vgg_l3_4_7_merged, num_classes, kernel_size=16, strides=8, padding='same',
-                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
+                                   kernel_initializer=initializer)
 
     # Debugging:
     #tf.Print(vgg_l3_4_7_deconv, [tf.shape(vgg_l3_4_7_deconv)])
@@ -147,7 +161,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                     # using static values for keep_prob and learning_rate for now,
                     # later figure out if the arguments can be tensor objects
                     keep_prob: 0.6,
-                    learning_rate: 0.001
+                    learning_rate: 0.0001
                 }
             )
             print('Batch: {}, Loss: {:.3f}'.format(i, loss), flush=True)
