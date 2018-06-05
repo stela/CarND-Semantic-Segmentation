@@ -36,7 +36,7 @@ The network is trained in [train_nn()](main.py#L139-L168). For each epoch its nu
 
 As can be seen sections of well-lit road are handled well, while really dark shadows are more challenging to be properly classified as road.
 
-All the images can be found in the [runs/1527649715.616012](runs/1527649715.616012) directory as well as in [project.zip](project.zip) if you want to view them in bulk.
+All the images can be found in the [runs/1528105524.749326](runs/1528105524.749326) directory as well as in [project.zip](project.zip) if you want to view them in bulk.
 
 ## Original README
 See [README-original.md](README-original.md)
