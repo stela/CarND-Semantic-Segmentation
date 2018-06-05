@@ -60,11 +60,12 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # "He initialization", variance_scaling_initializer() is adapted to ReLu.
     # Source https://stats.stackexchange.com/questions/319323/whats-the-difference-between-variance-scaling-initializer-and-xavier-initialize
     # VGG16 uses the ReLu activation function, so let's initialize using variance_scaling_initializer()!
+    # Or not... variance_scaling_initializer() performed very poorly compared to truncated_normal, so using it instead :-/
 
     # 1x1 layer
     l2_reg_scale = 1e-3
-    #initializer = tf.truncated_normal_initializer(stddev=0.01)
-    initializer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    initializer = tf.truncated_normal_initializer(stddev=0.01)
+    #initializer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
     vgg_l7_1x1 =\
         tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size=1, strides=1, padding='same',
                          kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale),
