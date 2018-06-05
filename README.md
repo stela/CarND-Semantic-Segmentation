@@ -6,15 +6,15 @@ The pretrained model is loaded by [load_vgg()](main.py#L20-L42). It returns a tu
 
 ## Feature Learning
 
-The previously loaded layers are combined in a way suitable for semantic segmentation in [layers()](main.py#L46-L89). 
+The previously loaded layers are combined in a way suitable for semantic segmentation in [layers()](main.py#L46-L104). 
 
 ## Neural Network Optimization
 
-Optimization of the trained network happens in [optimize()](main.py#L93-L120). This allows the inference stage to run faster, achieving good enough performance even on modest hardware.
+Optimization of the trained network happens in [optimize()](main.py#L108-L135). This allows the inference stage to run faster, achieving good enough performance even on modest hardware.
 
 ## Training the Neural Network
 
-The network is trained in [train_nn()](main.py#L124-L153). For each epoch its number is printed out and for each batch the loss is printed.
+The network is trained in [train_nn()](main.py#L139-L168). For each epoch its number is printed out and for each batch the loss is printed.
 
 * The loss slowly decreases during training.
 * I set the number of epochs to 25, loss didn't seem to decrease much further at that point.
