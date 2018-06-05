@@ -22,17 +22,17 @@ The network is trained in [train_nn()](main.py#L139-L168). For each epoch its nu
 * Most of the road-pixels in the current lane are labeled as such, while everything else like trees, sky, other cars and asphalt outside the current lane are fairly clear. 
 
 ## Sample images
-![um_000000.png](runs/1527649715.616012/um_000000.png  "um_000000.png")
+![um_000000.png](runs/1528105524.749326/um_000000.png  "um_000000.png")
 
-![um_000001.png](runs/1527649715.616012/um_000001.png  "um_000001.png")
+![um_000001.png](runs/1528105524.749326/um_000001.png  "um_000001.png")
 
-![um_000002.png](runs/1527649715.616012/um_000002.png  "um_000002.png")
+![um_000002.png](runs/1528105524.749326/um_000002.png  "um_000002.png")
 
-![uu_000090.png](runs/1527649715.616012/uu_000090.png  "uu_000090.png")
+![uu_000090.png](runs/1528105524.749326/uu_000090.png  "uu_000090.png")
 
-![uu_000091.png](runs/1527649715.616012/uu_000091.png  "uu_000091.png")
+![uu_000091.png](runs/1528105524.749326/uu_000091.png  "uu_000091.png")
 
-![uu_000092.png](runs/1527649715.616012/uu_000092.png  "uu_000092.png")
+![uu_000092.png](runs/1528105524.749326/uu_000092.png  "uu_000092.png")
 
 As can be seen sections of well-lit road are handled well, while really dark shadows are more challenging to be properly classified as road.
 
